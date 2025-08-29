@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EkoYatra | EkoRisk</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #e8f5e9, #ffffff);
+      color: #222;
+    }
+
+    header {
+      background: #2e7d32;
+      padding: 1rem 2rem;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+    }
+
+    nav a {
+      margin-left: 20px;
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #a5d6a7;
+    }
+
+    .banner {
+      text-align: center;
+      padding: 3rem 1rem;
+      background: url("https://i.ibb.co/nRkWk5N/eco-banner.jpg") center/cover no-repeat;
+      color: white;
+      text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+    }
+
+    .banner h2 {
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .risk-section {
+      padding: 2rem;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .risk-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .risk-card {
+      background: #ffffff;
+      padding: 1.5rem;
+      border-radius: 15px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .risk-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .risk-card h3 {
+      margin-bottom: 0.5rem;
+      color: #2e7d32;
+    }
+
+    .map-container {
+      margin-top: 3rem;
+      text-align: center;
+    }
+
+    .map-container img {
+      max-width: 100%;
+      border-radius: 15px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+      transition: transform 0.4s ease;
+    }
+
+    .map-container img:hover {
+      transform: scale(1.02);
+    }
+
+    .alert-box {
+      margin-top: 2rem;
+      background: #fff8e1;
+      border-left: 6px solid #f9a825;
+      padding: 1rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { background-color: #fff8e1; }
+      50% { background-color: #fff3cd; }
+      100% { background-color: #fff8e1; }
+    }
+
+    footer {
+      margin-top: 3rem;
+      background: #2e7d32;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>EkoYatra</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <!-- <a href="login.html">Login</a> -->
+      <a href="help.html">Help</a>
+    </nav>
+  </header>
+
+  <section class="banner">
+    <h2>EkoRisk – Disaster Awareness</h2>
+    <p>Stay alert, stay safe, stay eco 🌍✨</p>
+  </section>
+
+  <section class="risk-section">
+    <h2>Risk Dashboard</h2>
+    <div class="risk-grid">
+      <div class="risk-card">
+        <h3>Flood Risk 🌊</h3>
+        <p>Status: <b>Low</b></p>
+        <p>Precaution: Stay updated on rainfall alerts.</p>
+      </div>
+      <div class="risk-card">
+        <h3>Earthquake Risk 🌏</h3>
+        <p>Status: <b>Low</b></p>
+        <p>Precaution: Keep emergency kit ready.</p>
+      </div>
+      <div class="risk-card">
+        <h3>Heatwave Risk ☀️</h3>
+        <p>Status: <b>Low</b></p>
+        <p>Precaution: Stay hydrated, avoid peak heat hours.</p>
+      </div>
+      <div class="risk-card">
+        <h3>Air Quality Risk 🌫️</h3>
+        <p>Status: <b>Moderate</b></p>
+        <p>Precaution: Wear masks outdoors if sensitive.</p>
+      </div>
+    </div>
+
+    <!-- <div class="map-container">
+      <h2>Risk Map</h2>
+      <img src="https://i.ibb.co/Vg4KrZC/world-map-placeholder.jpg" alt="World Risk Map">
+    </div> -->
+
+    <div class="alert-box">
+      ⚠️ Alert: Heatwave warning in some regions! Take precautions.
+    </div>
+  </section>
+
+  <footer>
+    <p>🌱 Together for a Safer, Greener Future 🌱</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,703 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>EkoYatra — BioBin (EkoCoins)</title>
+ 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+ 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    /* ----- CSS Variables for a Clean Theme ----- */
+    :root {
+      --primary: #27ae60;
+      --primary-light: #6bd48c;
+      --bg-color: #f0f4f8;
+      --card-bg: #ffffff;
+      --text-color: #333;
+      --text-light: #6c757d;
+      --border-color: #e0e0e0;
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --green-gradient: linear-gradient(135deg, #2ecc71, #27ae60);
+    }
+
+    /* ----- Base Styles ----- */
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      padding: 1.5rem;
+    }
+
+    .app {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* ----- Main Dashboard Container ----- */
+    .dashboard-container {
+      display: flex;
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+
+    /* ----- Left & Right Panels ----- */
+    .main-panel {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    .sidebar-panel {
+      width: 350px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* ----- Panel Card Style ----- */
+    .card {
+      background-color: var(--card-bg);
+      border-radius: 1.5rem;
+      box-shadow: var(--shadow-md);
+      padding: 2rem;
+      border: 1px solid var(--border-color);
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 600;
+      font-size: 1.25rem;
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+    }
+    .card-header .icon {
+      font-size: 1.5rem;
+    }
+
+    /* ----- Upload Section ----- */
+    .upload-box {
+      border: 2px dashed var(--primary-light);
+      background-color: #f9fdfc;
+      border-radius: 1rem;
+      padding: 4rem 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .upload-box:hover:not(.disabled) {
+      background-color: #eaf8f1;
+    }
+    .upload-box.disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+    .upload-box .upload-icon {
+      color: var(--primary-light);
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+    }
+    .upload-box .upload-text {
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+    .upload-box .upload-subtext {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      margin-top: 0.25rem;
+    }
+    #preview {
+      display: none;
+      max-width: 100%;
+      border-radius: 10px;
+      margin-top: 1rem;
+      box-shadow: var(--shadow-md);
+    }
+    input[type=file] { display: none; }
+
+    .or-separator {
+      text-align: center;
+      margin: 1.5rem 0;
+      color: var(--text-light);
+      font-size: 0.9rem;
+      position: relative;
+    }
+    .or-separator::before,
+    .or-separator::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 40%;
+      height: 1px;
+      background-color: var(--border-color);
+    }
+    .or-separator::before { left: 0; }
+    .or-separator::after { right: 0; }
+
+    .manual-entry {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .manual-entry input {
+      flex-grow: 1;
+      border: 1px solid var(--border-color);
+      border-radius: 0.75rem;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      color: var(--text-color);
+      transition: border-color 0.3s ease;
+    }
+    .manual-entry input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    .check-btn {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: background-color 0.3s ease;
+    }
+    .check-btn:hover {
+      background-color: #219150;
+    }
+    .result-area { margin-top: 1rem; }
+
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .action-btn {
+      background-color: #eef2f6;
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+      padding: 0.75rem 1.5rem;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+    .action-btn:hover {
+      background-color: #e0e6ec;
+      transform: translateY(-2px);
+    }
+    .action-btn i {
+      margin-right: 0.5rem;
+      color: var(--primary);
+    }
+
+    /* ----- Right Panel: Profile & Analytics ----- */
+    .profile-card {
+      background-color: var(--card-bg);
+      border-radius: 1.5rem;
+      box-shadow: var(--shadow-md);
+      padding: 2rem;
+      border: 1px solid var(--border-color);
+    }
+    .profile-card .card-header {
+      margin-bottom: 1rem;
+    }
+    .metric-card {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background-color: var(--bg-color);
+      padding: 1rem 1.5rem;
+      border-radius: 1rem;
+      border: 1px solid var(--border-color);
+      margin-bottom: 1rem;
+    }
+    .metric-icon {
+      background-color: #e8f4ec;
+      color: var(--primary);
+      padding: 0.8rem;
+      border-radius: 50%;
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .metric-content .value {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    .metric-content .label {
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+    .claim-btn {
+      width: 100%;
+      padding: 1rem;
+      background: var(--green-gradient);
+      color: white;
+      border: none;
+      border-radius: 1rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .claim-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+   
+    /* Small UI elements */
+    .badge {
+      display: inline-block;
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+    .badge.recyclable { background: #dbeafe; color: #1e3a8a; }
+    .badge.biodegradable { background: #bbf7d0; color: #14532d; }
+    .badge.hazardous { background: #fee2e2; color: #7f1d1d; }
+    .badge.unknown { background: #f3f4f6; color: #6b7280; }
+
+    /* Responsive Design */
+    @media (max-width: 992px) {
+      .dashboard-container {
+        flex-direction: column;
+      }
+      .sidebar-panel {
+        width: 100%;
+      }
+    }
+   
+    /* Footer & other minor styles */
+    .footer {
+      text-align: center;
+      color: var(--text-light);
+      font-size: 0.8rem;
+      margin-top: 1.5rem;
+    }
+   
+    /* Minor fixes for existing elements */
+    .stat-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 1rem; }
+    .stat { flex: 1; background: #f8fafc; padding: 8px; border-radius: 10px; min-width: 110px; text-align: center; }
+    #chart { margin-top: 1rem; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="dashboard-container">
+      <div class="main-panel">
+        <div class="card">
+          <div class="card-header">
+            <i class="fas fa-camera icon"></i>
+            <span>Scan / Upload Waste</span>
+          </div>
+         
+          <div class="upload-box disabled" id="uploadBox">
+            <i class="fas fa-cloud-upload-alt upload-icon"></i>
+            <p class="upload-text">Drop your image here or click to browse</p>
+            <p class="upload-subtext">Supports JPG, PNG, WebP formats</p>
+          </div>
+         
+          <input type="file" id="fileInput" accept="image/*" />
+          <img id="preview" />
+
+          <div class="or-separator">or enter product barcode / name</div>
+
+          <div class="manual-entry">
+            <input id="barcodeInput" type="text" placeholder="Enter barcode or product name (e.g., 8901234567890 or 'water bottle')" />
+            <button id="checkBarcode" class="check-btn">Check</button>
+          </div>
+         
+          <div class="result-area" id="resultArea"></div>
+
+          <div class="action-buttons">
+            <button id="nearbyBtn" class="action-btn"><i class="fas fa-map-marker-alt"></i>Find Nearby Centers</button>
+            <button id="resetBtn" class="action-btn"><i class="fas fa-sync-alt"></i>Reset</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-panel">
+        <div class="card profile-card">
+          <div class="card-header">
+            <i class="fas fa-seedling icon"></i>
+            <span>Your Eko Profile</span>
+          </div>
+          <p style="font-size: 0.9rem; color: var(--text-light); margin-top: -0.5rem; margin-bottom: 1.5rem;">Track your environmental impact</p>
+         
+          <div class="metric-card">
+            <div class="metric-icon"><i class="fas fa-leaf"></i></div>
+            <div class="metric-content">
+              <div class="value" id="coinBalance">0</div>
+              <div class="label">EkoCoins</div>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon"><i class="fas fa-box"></i></div>
+            <div class="metric-content">
+              <div class="value" id="itemsCount">0</div>
+              <div class="label">Items scanned</div>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon"><i class="fas fa-weight-hanging"></i></div>
+            <div class="metric-content">
+              <div class="value" id="plasticSaved">0.00 kg</div>
+              <div class="label">Plastic saved</div>
+            </div>
+          </div>
+
+          <button id="claimBtn" class="claim-btn">
+            <i class="fas fa-coins" style="margin-right: 0.5rem;"></i>Claim EkoCoins
+          </button>
+        </div>
+       
+        <div class="card">
+            <h3>Quick Analytics</h3>
+            <canvas id="chart"></canvas>
+            <div id="log" style="margin-top: 1rem;"></div>
+        </div>
+      </div>
+    </div>
+   
+    <footer class="footer">
+      Prototype • No backend required • Works offline in browser (uses localStorage)
+    </footer>
+  </div>
+
+  <script>
+    // ========== Predefined product database (example) ==========
+    const PRODUCT_DB = {
+      '8901234567890': {name: 'PET Water Bottle', category: 'recyclable', est_weight_kg: 0.02, points: 10},
+      '1234567890123': {name: 'Banana Peel', category: 'biodegradable', est_weight_kg: 0.05, points: 5},
+      '4445556667778': {name: 'AA Battery', category: 'hazardous', est_weight_kg: 0.02, points: 20},
+      'water bottle': {name: 'Generic Water Bottle', category: 'recyclable', est_weight_kg: 0.03, points: 10},
+      'banana': {name: 'Banana', category: 'biodegradable', est_weight_kg: 0.07, points: 5}
+    };
+   
+    // Links to external resources for different waste types
+    const RESOURCE_LINKS = {
+      'recyclable': 'https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables',
+      'biodegradable': 'https://www.epa.gov/recycle/composting-home',
+      'hazardous': 'https://www.epa.gov/hw/learn-about-hazardous-waste',
+      'unknown': 'https://www.epa.gov/recycle'
+    };
+
+    // localStorage keys
+    const LS = 'ekoyatra_biobin_v1';
+
+    // state & default
+    let state = {
+      coins: 0,
+      items: 0,
+      counts: {biodegradable: 0, recyclable: 0, hazardous: 0, unknown: 0},
+      plastic_saved_kg: 0,
+      log: []
+    };
+
+    // Try load from local storage
+    const saved = localStorage.getItem(LS);
+    if (saved) {
+      try {
+        state = JSON.parse(saved);
+      } catch(e) { /* ignore */ }
+    }
+
+    // UI elements
+    const uploadBox = document.getElementById('uploadBox');
+    const fileInput = document.getElementById('fileInput');
+    const preview = document.getElementById('preview');
+    const resultArea = document.getElementById('resultArea');
+    const barcodeInput = document.getElementById('barcodeInput');
+    const checkBarcode = document.getElementById('checkBarcode');
+    const nearbyBtn = document.getElementById('nearbyBtn');
+    const claimBtn = document.getElementById('claimBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const coinBalance = document.getElementById('coinBalance');
+    const itemsCount = document.getElementById('itemsCount');
+    const plasticSaved = document.getElementById('plasticSaved');
+    const logEl = document.getElementById('log');
+
+    // chart
+    const ctx = document.getElementById('chart').getContext('2d');
+    let chart;
+
+    // MobileNet model
+    let net = null;
+
+    async function loadModel() {
+      console.log("Loading AI model...");
+      uploadBox.classList.add('disabled'); // Disable the upload box
+      resultArea.innerHTML = `<div class="muted">Loading AI model... <i class="fas fa-spinner fa-spin"></i></div>`;
+     
+      try {
+        net = await mobilenet.load();
+        console.log("AI model loaded successfully.");
+        uploadBox.classList.remove('disabled'); // Enable the upload box
+        resultArea.innerHTML = `<div class="muted">Model ready. Upload an image or enter a product.</div>`;
+      } catch (err) {
+        console.error("Error loading MobileNet model:", err);
+        resultArea.innerHTML = `<div class="muted" style="color: red;">Error loading model. Please try refreshing the page.</div>`;
+      }
+    }
+
+    // helper: save state
+    function saveState() {
+      localStorage.setItem(LS, JSON.stringify(state));
+      updateUI();
+    }
+
+    function updateUI() {
+      coinBalance.textContent = state.coins;
+      itemsCount.textContent = state.items;
+      plasticSaved.textContent = state.plastic_saved_kg.toFixed(2) + ' kg';
+
+      // log
+      logEl.innerHTML = state.log.slice().reverse().map(l => `<div style="padding:6px 0;border-bottom:1px dashed #eef6ee; font-size: 0.8rem;">${l}</div>`).join('');
+     
+      // chart update
+      const data = [state.counts.biodegradable, state.counts.recyclable, state.counts.hazardous, state.counts.unknown];
+      const chartColors = ['#bbf7d0', '#dbeafe', '#fee2e2', '#f3f4f6'];
+     
+      if (!chart) {
+        chart = new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: ['Biodegradable', 'Recyclable', 'Hazardous', 'Unknown'],
+            datasets: [{
+              data: data,
+              backgroundColor: chartColors,
+              borderColor: 'white',
+              hoverBackgroundColor: chartColors,
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: 'bottom',
+                labels: {
+                  boxWidth: 12,
+                  font: { family: 'Poppins' }
+                }
+              },
+              tooltip: {
+                titleFont: { family: 'Poppins' },
+                bodyFont: { family: 'Poppins' }
+              }
+            }
+          }
+        });
+      } else {
+        chart.data.datasets[0].data = data;
+        chart.update();
+      }
+    }
+
+    // classification logic: map mobilenet label to our categories (simple heuristic)
+    function mapLabelToCategory(label) {
+      label = label.toLowerCase();
+      if (/banana|apple|food|vegetable|fruit|plant|flower|leaf|mammal/.test(label)) return 'biodegradable';
+      if (/bottle|plastic|paper|newspaper|envelope|glass|jar|can|metal|tin|screwdriver/.test(label)) return 'recyclable';
+      if (/battery|electronics|computer|monitor|phone|charger|toothbrush/.test(label)) return 'hazardous';
+      return 'unknown';
+    }
+
+    // award points and update stats
+    function applyResult(cat, product, rawLabel, confidence) {
+      const now = new Date().toLocaleString();
+      let points = 0;
+      let weight = 0;
+
+      if (product && product.points) points = product.points;
+      else if (cat === 'biodegradable') points = 5;
+      else if (cat === 'recyclable') points = 10;
+      else if (cat === 'hazardous') points = 20;
+      else points = 2;
+
+      if (product && product.est_weight_kg) weight = product.est_weight_kg;
+      else if (cat === 'recyclable') weight = 0.02;
+      else weight = 0.05;
+
+      state.coins += points;
+      state.items += 1;
+      state.counts[cat] = (state.counts[cat] || 0) + 1;
+
+      if (cat === 'recyclable') {
+        state.plastic_saved_kg += weight * 0.6; // crude: 60% of recyclables are plastic in prototype
+      }
+     
+      const productName = product ? product.name : rawLabel;
+      const logMsg = `${now} — ${productName} (${(confidence*100).toFixed(1)}% confidence) → <span class="badge ${cat}">${cat.toUpperCase()}</span> (+${points} EkoCoins)`;
+      state.log.push(logMsg);
+      saveState();
+
+      return {points, weight};
+    }
+
+    // handle product lookup (barcode or name)
+    function lookupProduct(input) {
+      if (!input) return null;
+      const key = input.trim().toLowerCase();
+      if (PRODUCT_DB[key]) return PRODUCT_DB[key];
+      const digits = key.replace(/\D/g, '');
+      if (digits.length >= 8 && PRODUCT_DB[digits]) return PRODUCT_DB[digits];
+      return null;
+    }
+
+    // show result UI
+    function showResultUI(cat, product, rawLabel, confidence) {
+      const productName = product ? product.name : (rawLabel || 'Detected item');
+      const confidencePercent = (confidence * 100).toFixed(1);
+      const resourceLink = RESOURCE_LINKS[cat] || RESOURCE_LINKS.unknown;
+
+      resultArea.innerHTML = `
+        <div class="result-details">
+          <div style="font-weight: 600;">AI Analysis:</div>
+          <div>Detected: <strong>${rawLabel}</strong> (Confidence: ${confidencePercent}%)</div>
+          <div style="margin-top: 10px;">
+            <div style="display:flex;gap:12px;align-items:center;justify-content:flex-start;flex-wrap:wrap;">
+              <div class="badge ${cat}">Category: ${cat.toUpperCase()}</div>
+              <div><a href="${resourceLink}" target="_blank" style="color:var(--primary); text-decoration: none;">Learn more about ${cat} recycling</a></div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // ======== File upload -> classify ========
+    uploadBox.addEventListener('click', () => {
+      // Only allow clicks if the upload box is not disabled
+      if (!uploadBox.classList.contains('disabled')) {
+        fileInput.click();
+      }
+    });
+   
+    fileInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      if (!net) {
+        resultArea.innerHTML = `<div class="muted">Please wait, the AI model is still loading...</div>`;
+        return;
+      }
+     
+      resultArea.innerHTML = `<div class="muted">Classifying image... <i class="fas fa-spinner fa-spin"></i></div>`;
+     
+      const fileUrl = URL.createObjectURL(file);
+      preview.src = fileUrl;
+      preview.style.display = 'block';
+
+      try {
+        await new Promise(resolve => preview.onload = resolve);
+        const results = await net.classify(preview, 3);
+       
+        // Clean up the object URL to free up memory
+        URL.revokeObjectURL(fileUrl);
+       
+        const top = results[0];
+        const rawLabel = top.className;
+        const cat = mapLabelToCategory(rawLabel);
+       
+        const words = rawLabel.toLowerCase().split(/[, ]+/);
+        let matchedProduct = null;
+        for (const w of words) {
+          if (PRODUCT_DB[w]) {
+            matchedProduct = PRODUCT_DB[w];
+            break;
+          }
+        }
+
+        showResultUI(cat, matchedProduct, rawLabel, top.probability);
+        const applied = applyResult(cat, matchedProduct, rawLabel, top.probability);
+        resultArea.innerHTML += `<div style="margin-top:10px;text-align:center;">You earned <strong>+${applied.points} EkoCoins</strong></div>`;
+      } catch (err) {
+        console.error(err);
+        resultArea.innerHTML = `<div class="muted">Error classifying image. Please try another or check the console for details.</div>`;
+      }
+    });
+
+    // barcode / product check
+    checkBarcode.addEventListener('click', () => {
+      const text = barcodeInput.value.trim();
+      if (!text) {
+        resultArea.innerHTML = `<div class="muted">Please enter a barcode or product name.</div>`;
+        return;
+      }
+      const product = lookupProduct(text);
+      if (product) {
+        const cat = product.category;
+        showResultUI(cat, product, product.name, 1.0); // 100% confidence for database lookup
+        const applied = applyResult(cat, product, product.name, 1.0);
+        resultArea.innerHTML += `<div style="margin-top:10px;text-align:center;">You earned <strong>+${applied.points} EkoCoins</strong></div>`;
+      } else {
+        resultArea.innerHTML = `<div class="muted">Product not found in local DB. Try uploading an image instead.</div>`;
+      }
+    });
+
+    // find nearby recycling centers using geolocation + google maps link
+    nearbyBtn.addEventListener('click', () => {
+      if (!navigator.geolocation) {
+        alert('Geolocation not supported by this browser.');
+        return;
+      }
+      nearbyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Locating...';
+      navigator.geolocation.getCurrentPosition(pos => {
+        nearbyBtn.innerHTML = '<i class="fas fa-map-marker-alt"></i>Find Nearby Centers';
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        const q = encodeURIComponent('recycling center');
+        const url = `https://www.google.com/maps/search/?api=1&query=${q}&query_place_id=&center=${lat},${lng}`;
+        window.open(url, '_blank');
+      }, err => {
+        nearbyBtn.innerHTML = '<i class="fas fa-map-marker-alt"></i>Find Nearby Centers';
+        alert('Unable to get your location. Please check your browser settings.');
+      });
+    });
+
+    // claim button shows redemption options (prototype)
+    claimBtn.addEventListener('click', () => {
+      const coins = state.coins;
+      if (coins < 50) {
+        alert(`You have ${coins} EkoCoins. You need 50 to make a claim.`);
+        return;
+      }
+      if (confirm(`Redeem 50 EkoCoins for a sapling donation? (This is a prototype)`)) {
+        state.coins -= 50;
+        state.log.push(`${new Date().toLocaleString()} — Redeemed 50 EkoCoins for sapling (prototype)`);
+        saveState();
+        alert('Redeemed! Thank you for helping the planet!');
+      }
+    });
+
+    // reset
+    resetBtn.addEventListener('click', () => {
+      if (confirm('Reset all demo data? This cannot be undone.')) {
+        localStorage.removeItem(LS);
+        location.reload();
+      }
+    });
+
+    // initial load
+    loadModel().then(() => updateUI());
+  </script>
+</body>
+</html>

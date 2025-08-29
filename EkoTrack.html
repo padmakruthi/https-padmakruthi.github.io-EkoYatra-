@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EkoTrack - Carbon Footprint Estimator</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #f3fff4, #d6f5e1);
+      color: #222;
+      overflow-x: hidden;
+    }
+
+    /* HEADER / NAVBAR */
+    header {
+      background: linear-gradient(90deg, #a8e6a1, #7bd68a);
+      color: #003300;
+      padding: 15px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    header h1 {
+      font-size: 1.6rem;
+      margin: 0;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    nav a {
+      color: #003300;
+      text-decoration: none;
+      margin-left: 22px;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    nav a:hover {
+      color: #056608;
+      text-shadow: 0px 0px 8px rgba(0, 128, 0, 0.3);
+    }
+
+    /* MAIN CONTAINER */
+    .container {
+      max-width: 850px;
+      margin: 50px auto;
+      background: white;
+      padding: 35px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      animation: fadeIn 1s ease;
+    }
+
+    .container h2 {
+      text-align: center;
+      color: #056608;
+      font-size: 2rem;
+      margin-bottom: 25px;
+      font-weight: 700;
+    }
+
+    /* FORM */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid #bbb;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    select:focus, input:focus {
+      border-color: #056608;
+      outline: none;
+      box-shadow: 0 0 8px rgba(5,102,8,0.3);
+    }
+
+    button {
+      width: 100%;
+      background: linear-gradient(135deg, #43a047, #2e7d32);
+      color: white;
+      padding: 14px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.3s ease;
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, #2e7d32, #1b5e20);
+      transform: scale(1.03);
+    }
+
+    /* RESULT BOX */
+    .result {
+      margin-top: 35px;
+      padding: 22px;
+      background: #f6fff7;
+      border-left: 6px solid #43a047;
+      border-radius: 14px;
+      display: none;
+      animation: slideUp 0.8s ease;
+    }
+
+    .result h3 {
+      margin-top: 0;
+      color: #2e7d32;
+      font-size: 1.4rem;
+    }
+
+    .eco-tip {
+      margin-top: 15px;
+      font-style: italic;
+      color: #444;
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+
+    @keyframes slideUp {
+      from {transform: translateY(30px); opacity: 0;}
+      to {transform: translateY(0); opacity: 1;}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>EkoYatra</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="ekotrack.html">EkoTrack</a>
+      <a href="help.html">Help</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h2>🌍 EkoTrack – Estimate Your Carbon Footprint</h2>
+    <form id="footprintForm">
+      <div class="form-group">
+        <label for="travel">Travel Mode:</label>
+        <select id="travel">
+          <option value="car">Car</option>
+          <option value="bus">Bus</option>
+          <option value="bike">Bike</option>
+          <option value="walk">Walk</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="food">Food Preference:</label>
+        <select id="food">
+          <option value="veg">Vegetarian</option>
+          <option value="nonveg">Non-Vegetarian</option>
+          <option value="vegan">Vegan</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="energy">Daily Electricity Usage (kWh):</label>
+        <input type="number" id="energy" value="5" min="1">
+      </div>
+
+      <button type="button" onclick="calculateFootprint()">Calculate Footprint</button>
+    </form>
+
+    <div class="result" id="resultBox">
+      <h3>Your Estimated Carbon Footprint 🌱</h3>
+      <p id="footprint"></p>
+      <div class="eco-tip" id="ecoTip"></div>
+    </div>
+  </div>
+
+  <script>
+    function calculateFootprint() {
+      const travel = document.getElementById("travel").value;
+      const food = document.getElementById("food").value;
+      const energy = parseInt(document.getElementById("energy").value);
+
+      let score = 0;
+      let tips = [];
+
+      if (travel === "car") { score += 50; tips.push("Try carpooling 🚗🤝"); }
+      else if (travel === "bus") { score += 20; tips.push("Public transport saves emissions 🚌"); }
+      else if (travel === "bike") { score += 5; tips.push("Cycling is great for health & Earth 🚴"); }
+      else { score += 0; tips.push("Walking is the best eco-choice 👣"); }
+
+      if (food === "nonveg") { score += 40; tips.push("Eat more plant-based meals 🥗"); }
+      else if (food === "veg") { score += 20; tips.push("Vegetarian diet is eco-friendly 🌿"); }
+      else { score += 10; tips.push("Vegan diet has the least footprint 🌱"); }
+
+      score += energy * 2;
+      tips.push("Save electricity by switching off unused devices 💡");
+
+      document.getElementById("footprint").innerText = 
+        `Your daily footprint score is ${score} eco-points.`;
+
+      document.getElementById("ecoTip").innerText = 
+        "Eco Tips: " + tips.join(" | ");
+
+      document.getElementById("resultBox").style.display = "block";
+    }
+  </script>
+</body>
+</html>
+
+

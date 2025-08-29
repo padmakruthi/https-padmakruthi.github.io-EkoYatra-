@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>EkoYatra — EkoCommunity</title>
+  <style>
+    :root{
+      --bg: #f6fff6;
+      --card: #ffffff;
+      --accent: #4ec07a;
+      --accent-2: #a3ec83;
+      --muted: #4b5b56;
+      --glass: rgba(255,255,255,0.6);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: linear-gradient(180deg,#f8fff8 0%, #ffffff 100%);
+      color:#083;
+      -webkit-font-smoothing:antialiased;
+    }
+    header{
+      position:sticky; top:0; z-index:1000;
+      background: rgba(255,255,255,0.92);
+      padding:10px 18px; backdrop-filter: blur(8px);
+      box-shadow: 0 4px 14px rgba(10,60,30,0.04);
+    }
+    .nav{
+      max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;
+    }
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;color:var(--accent)}
+    .brand img{width:38px;height:38px;border-radius:8px;object-fit:cover}
+    .nav-links{display:flex;gap:14px;align-items:center}
+    .nav-links a{color:var(--muted);font-weight:600;padding:.4rem .6rem;border-radius:8px}
+    .nav-links a.active, .nav-links a:hover{background:linear-gradient(90deg, rgba(163,236,131,0.18), rgba(78,192,122,0.08));color:#063}
+
+    main.container{max-width:1100px;margin:20px auto;padding:0 16px}
+
+    .layout{display:grid;grid-template-columns:320px 1fr;gap:18px}
+    @media(max-width:900px){.layout{grid-template-columns:1fr} .left-col{order:2}}
+
+    /* left column */
+    .left-col{position:relative}
+    .profile-card{background:var(--card);padding:16px;border-radius:12px;box-shadow:0 6px 20px rgba(10,60,30,0.04);}
+    .profile-row{display:flex;gap:12px;align-items:center}
+    .avatar{width:64px;height:64px;border-radius:12px;background:linear-gradient(45deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:1.2rem}
+    .profile-meta h3{margin:0;font-size:1.05rem}
+    .profile-meta p{margin:0;color:var(--muted);font-size:.9rem}
+
+    .suggestions{margin-top:14px}
+    .suggestions h4{font-size:.95rem;margin-bottom:8px;color:#075}
+    .suggest-item{display:flex;align-items:center;gap:10px;padding:8px;border-radius:10px;margin-bottom:8px;background:linear-gradient(180deg,rgba(163,236,131,0.04),transparent)}
+    .follow-btn{margin-left:auto;background:transparent;border:1px solid rgba(10,60,30,0.06);padding:.4rem .6rem;border-radius:8px;color:#075;font-weight:700;cursor:pointer}
+
+    /* feed */
+    .feed-col{}
+    .create-card{background:var(--card);padding:14px;border-radius:12px;box-shadow:0 6px 18px rgba(10,60,30,0.04);margin-bottom:16px}
+    .create-top{display:flex;gap:12px;align-items:flex-start}
+    .create-top .avatar-sm{width:44px;height:44px;border-radius:10px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
+    .create-area{flex:1}
+    textarea#postText{width:100%;min-height:70px;padding:10px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);resize:vertical;font-size:1rem}
+    .create-actions{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:10px}
+    .tags-input{display:flex;gap:8px;flex-wrap:wrap}
+    .tag{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#052;padding:.25rem .5rem;border-radius:8px;font-weight:700;font-size:.85rem}
+
+    .btn{background:var(--accent);color:#053;padding:.5rem .8rem;border-radius:10px;border:none;font-weight:700;cursor:pointer;box-shadow:0 8px 18px rgba(78,192,122,0.12)}
+    .btn.ghost{background:transparent;border:1px solid rgba(10,60,30,0.06);color:var(--muted);box-shadow:none}
+
+    /* posts */
+    .post{background:var(--card);padding:14px;border-radius:12px;margin-bottom:14px;box-shadow:0 6px 18px rgba(10,60,30,0.03);transition:transform .22s}
+    .post:hover{transform:translateY(-6px)}
+    .post-head{display:flex;align-items:center;gap:12px}
+    .post-head .author{font-weight:800}
+    .post-time{color:var(--muted);font-size:.9rem;margin-left:auto}
+    .post-body{margin-top:10px;color:#0b3a2e}
+    .post-body p{margin:0 0 8px 0}
+    .post-tags{display:flex;gap:8px;flex-wrap:wrap}
+    .post-tags .tag{background:transparent;color:var(--accent);border:1px solid rgba(78,192,122,0.12);padding:.2rem .45rem;font-weight:700}
+
+    .post-controls{display:flex;gap:10px;margin-top:10px;align-items:center}
+    .like-btn, .comment-btn{background:transparent;border:1px solid rgba(0,0,0,0.06);padding:.4rem .6rem;border-radius:8px;cursor:pointer;color:var(--muted);display:flex;gap:8px;align-items:center}
+    .like-btn.liked{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#052;border:none}
+
+    .comments{margin-top:10px;padding-top:10px;border-top:1px dashed rgba(0,0,0,0.04);display:none}
+    .comment{display:flex;gap:8px;align-items:flex-start;margin-bottom:8px}
+    .comment .c-avatar{width:36px;height:36px;border-radius:8px;background:#cfefd2;display:flex;align-items:center;justify-content:center;font-weight:700}
+    .comment .c-body{background:#f7fff7;padding:8px;border-radius:8px}
+    .show-comments{display:block}
+
+    /* small footer */
+    footer{max-width:1100px;margin:20px auto;padding:12px;color:var(--muted);text-align:center;font-size:.95rem}
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="nav">
+      <div class="brand"><img src="./images/logo-removebg-preview.png" alt="logo" onerror="this.style.opacity=.5">EkoYatra</div>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="index.html#menu">Menu</a>
+        <a href="ekocommunity.html" class="active">Community</a>
+        <a href="help.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="layout">
+      <!-- LEFT -->
+      <aside class="left-col">
+        <div class="profile-card">
+          <div class="profile-row">
+            <div class="avatar">A</div>
+            <div class="profile-meta">
+              <h3>Hello, Aishu</h3>
+              <p>Share your eco wins — plant, clean, swap!</p>
+            </div>
+          </div>
+
+          <div class="suggestions">
+            <h4>Suggested Connects</h4>
+            <div class="suggest-item"><div style="width:40px;height:40px;border-radius:8px;background:#cfe;display:flex;align-items:center;justify-content:center">R</div><div>Ramu Recyclers</div><button class="follow-btn">Connect</button></div>
+            <div class="suggest-item"><div style="width:40px;height:40px;border-radius:8px;background:#efe;display:flex;align-items:center;justify-content:center">P</div><div>Priya — Green Club</div><button class="follow-btn">Connect</button></div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- FEED -->
+      <section class="feed-col">
+        <!-- Create post -->
+        <div class="create-card">
+          <div class="create-top">
+            <div class="avatar-sm">A</div>
+            <div class="create-area">
+              <textarea id="postText" placeholder="Share something about your eco activity..."></textarea>
+              <div class="create-actions">
+                <div class="tags-input" id="tagsPreview"></div>
+                <div style="display:flex;gap:8px;align-items:center">
+                  <input id="tagInput" placeholder="#tag (press Enter)" style="padding:.4rem .6rem;border-radius:8px;border:1px solid rgba(0,0,0,0.06)"/>
+                  <button class="btn" id="postBtn">Post</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feed container -->
+        <div id="feed"></div>
+
+      </section>
+    </div>
+    <footer>Made with 💚 — EkoCommunity demo (no server). Your posts are saved locally in this browser.</footer>
+  </main>
+
+  <script>
+    // --- Demo EkoCommunity feed with localStorage persistence ---
+    const FEED_KEY = 'ekoyatra_feed_v1';
+
+    // Sample starter posts
+    const starterPosts = [
+      {
+        id: genId(),
+        author: 'Priya',
+        avatarLetter: 'P',
+        time: timeAgo(new Date(Date.now() - 1000 * 60 * 60 * 5)), // 5h ago
+        content: 'Planted 5 saplings at the community garden today! #plantify #community',
+        tags: ['plantify','community'],
+        likes: 8,
+        comments: [{by:'Rohit', text:'Amazing work! 🌱'}]
+      },
+      {
+        id: genId(),
+        author: 'Rohit',
+        avatarLetter: 'R',
+        time: timeAgo(new Date(Date.now() - 1000 * 60 * 60 * 26)), // 26h ago
+        content: 'Organized a beach cleanup. Collected 30 kg of plastic waste. #cleanup #ocean',
+        tags: ['cleanup','ocean'],
+        likes: 15,
+        comments: []
+      }
+    ];
+
+    // Load feed from localStorage or initialize
+    let feed = JSON.parse(localStorage.getItem(FEED_KEY) || 'null');
+    if(!feed){ feed = starterPosts; saveFeed(); }
+
+    const feedEl = document.getElementById('feed');
+    const postBtn = document.getElementById('postBtn');
+    const postText = document.getElementById('postText');
+    const tagInput = document.getElementById('tagInput');
+    const tagsPreview = document.getElementById('tagsPreview');
+    let currentTags = [];
+
+    function genId(){ return 'p_'+Math.random().toString(36).slice(2,9); }
+    function timeAgo(date){
+      const diff = Math.floor((Date.now() - new Date(date))/1000);
+      if(diff < 60) return `${diff}s`;
+      if(diff < 3600) return `${Math.floor(diff/60)}m`;
+      if(diff < 86400) return `${Math.floor(diff/3600)}h`;
+      return `${Math.floor(diff/86400)}d`;
+    }
+
+    function saveFeed(){ localStorage.setItem(FEED_KEY, JSON.stringify(feed)); }
+
+    function renderFeed(){
+      feedEl.innerHTML = '';
+      // newest first
+      [...feed].reverse().forEach(post => {
+        const postNode = document.createElement('article');
+        postNode.className = 'post';
+        postNode.innerHTML = `
+          <div class="post-head">
+            <div style="width:48px;height:48px;border-radius:10px;background:linear-gradient(90deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;color:#052;font-weight:800">${escapeHtml(post.avatarLetter||post.author[0])}</div>
+            <div style="margin-left:8px">
+              <div class="author">${escapeHtml(post.author)}</div>
+              <div style="color:var(--muted);font-size:.9rem">${escapeHtml(post.location||'')}</div>
+            </div>
+            <div class="post-time">${escapeHtml(post.time||timeAgo(new Date()))}</div>
+          </div>
+          <div class="post-body">
+            <p>${linkify(escapeHtml(post.content))}</p>
+            <div class="post-tags">${(post.tags||[]).map(t=>`<span class="tag">#${escapeHtml(t)}</span>`).join('')}</div>
+          </div>
+          <div class="post-controls">
+            <button class="like-btn ${post.liked ? 'liked' : ''}" data-id="${post.id}">❤️ <span class="like-count">${post.likes||0}</span></button>
+            <button class="comment-btn" data-id="${post.id}">💬 <span>${(post.comments||[]).length}</span></button>
+            <div style="margin-left:auto;color:var(--muted);font-size:.9rem">share • save</div>
+          </div>
+          <div class="comments" id="comments-${post.id}">
+            ${(post.comments||[]).map(c=>`<div class="comment"><div class="c-avatar">${escapeHtml(c.by[0]||'U')}</div><div class="c-body"><strong>${escapeHtml(c.by)}</strong><div>${escapeHtml(c.text)}</div></div></div>`).join('')}
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <input data-id="${post.id}" class="add-comment" placeholder="Write a comment..." style="flex:1;padding:.5rem;border-radius:8px;border:1px solid rgba(0,0,0,0.06)"/>
+              <button class="btn ghost add-comment-btn" data-id="${post.id}">Reply</button>
+            </div>
+          </div>
+        `;
+        feedEl.appendChild(postNode);
+      });
+
+      // attach handlers
+      document.querySelectorAll('.like-btn').forEach(btn=>{
+        btn.onclick = ()=> {
+          const id = btn.getAttribute('data-id');
+          toggleLike(id, btn);
+        }
+      });
+      document.querySelectorAll('.comment-btn').forEach(btn=>{
+        btn.onclick = ()=> {
+          const id = btn.getAttribute('data-id');
+          toggleComments(id);
+        }
+      });
+      document.querySelectorAll('.add-comment-btn').forEach(btn=>{
+        btn.onclick = ()=> {
+          const id = btn.getAttribute('data-id');
+          const input = document.querySelector(`.add-comment[data-id="${id}"]`);
+          if(input && input.value.trim()){
+            addComment(id, {by:'You', text: input.value.trim()});
+            input.value='';
+          }
+        }
+      });
+    }
+
+    function toggleLike(postId, btn){
+      const p = feed.find(x=>x.id===postId);
+      if(!p) return;
+      p.liked = !p.liked;
+      p.likes = (p.likes||0) + (p.liked ? 1 : -1);
+      saveFeed();
+      renderFeed();
+    }
+
+    function toggleComments(postId){
+      const el = document.getElementById('comments-'+postId);
+      if(!el) return;
+      el.classList.toggle('show-comments');
+    }
+
+    function addComment(postId, comment){
+      const p = feed.find(x=>x.id===postId);
+      if(!p) return;
+      p.comments = p.comments || [];
+      p.comments.push(comment);
+      saveFeed();
+      renderFeed();
+    }
+
+    // Create new post
+    postBtn.addEventListener('click', ()=>{
+      const text = postText.value.trim();
+      if(!text) return alert('Write something to post!');
+      const newPost = {
+        id: genId(),
+        author: 'You',
+        avatarLetter: 'Y',
+        time: 'now',
+        content: text,
+        tags: currentTags.slice(0,5),
+        likes: 0,
+        comments: []
+      };
+      feed.push(newPost);
+      saveFeed();
+      postText.value='';
+      currentTags = []; tagsPreview.innerHTML='';
+      renderFeed();
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+
+    // Tag input (press Enter)
+    tagInput.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter'){ e.preventDefault(); const val = tagInput.value.trim().replace(/^#/, ''); if(val){ addTag(val); tagInput.value=''; } }
+    });
+    function addTag(t){
+      if(currentTags.includes(t)) return;
+      currentTags.push(t);
+      const span = document.createElement('span'); span.className='tag'; span.textContent = '#'+t;
+      span.onclick = ()=> { // remove tag on click
+        currentTags = currentTags.filter(x=>x!==t); span.remove();
+      }
+      tagsPreview.appendChild(span);
+    }
+
+    // helpers: escape, linkify hashtags/urls
+    function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]); }
+    function linkify(text){
+      // convert #tags to span with class; convert URLs to clickable links
+      const urlRegex = /(https?:\/\/[^\s]+)/g;
+      let parts = escapeHtml(text).split(urlRegex);
+      parts = parts.map(part=>{
+        if(urlRegex.test(part)) return `<a href="${part}" target="_blank" rel="noopener" style="color:var(--accent)">${part}</a>`;
+        return part.replace(/#([a-zA-Z0-9_]+)/g, '<span class="tag">#$1</span>');
+      });
+      return parts.join('');
+    }
+
+    // initial render
+    renderFeed();
+
+    // small UX: clear placeholder on first focus
+    postText.addEventListener('focus', ()=>{ if(postText.placeholder) postText.placeholder=''; });
+
+    // allow clearing demo feed (optional helper)
+    // window.clearFeed = ()=>{ localStorage.removeItem(FEED_KEY); location.reload(); }
+  </script>
+</body>
+</html>

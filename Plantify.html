@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>EkoYatra — Plantify (AR Mock)</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
+  <style>
+    /* ----- Updated CSS for a Polished UI ----- */
+    :root {
+      --bg: #f0f4f8;
+      --card: #ffffff;
+      --primary: #2ecc71;
+      --primary-light: #6bd48c;
+      --dark: #2c3e50;
+      --muted: #7f8c8d;
+      --border-color: #e0e0e0;
+      --shadow-sm: 0 4px 10px rgba(0,0,0,0.05);
+      --shadow-md: 0 8px 20px rgba(0,0,0,0.1);
+      --green-gradient: linear-gradient(135deg, #2ecc71, #27ae60);
+      --green-gradient-subtle: linear-gradient(135deg, #e6f9f0, #c8f7dc);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: var(--green-gradient-subtle);
+      color: var(--dark);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    header {
+      position: sticky; top: 0; z-index: 1000;
+      background: rgba(255,255,255,0.95);
+      padding: 1rem;
+      backdrop-filter: blur(8px);
+      box-shadow: var(--shadow-sm);
+    }
+    .nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+    .brand {
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .nav-links { display: flex; gap: 0.5rem; }
+    .nav-links a {
+      color: var(--muted);
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .nav-links a.active, .nav-links a:hover {
+      background: rgba(46,204,113,0.1);
+      color: var(--dark);
+      transform: translateY(-2px);
+    }
+
+    main.container {
+      max-width: 1200px;
+      margin: 1.5rem auto;
+      padding: 0 1rem;
+    }
+
+    .hero {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .hero-left { flex: 1; }
+    .hero-left h1 {
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+    .hero-left p {
+      color: var(--muted);
+      font-size: 1.1rem;
+      margin-bottom: 1.2rem;
+    }
+    .controls { display: flex; gap: 0.8rem; flex-wrap: wrap; align-items: center;}
+    #plantSelect {
+      padding: 0.6rem 0.8rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background-color: var(--card);
+      font-family: 'Poppins', sans-serif;
+      color: var(--dark);
+    }
+    .btn {
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      border: none;
+      transition: all 0.2s ease;
+    }
+    .btn.primary {
+      background: var(--green-gradient);
+      color: white;
+      box-shadow: 0 5px 15px rgba(46,204,113,0.3);
+    }
+    .btn.secondary {
+      background: var(--card);
+      color: var(--dark);
+      border: 1px solid var(--border-color);
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    .btn.primary:hover {
+      background: linear-gradient(135deg, #27ae60, #219150);
+      box-shadow: 0 5px 15px rgba(46,204,113,0.4);
+    }
+    
+    .library-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .plant-card {
+      background: var(--card);
+      padding: 1rem;
+      border-radius: 12px;
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      transition: transform 0.22s, box-shadow 0.22s, background 0.22s;
+      border: 2px solid transparent;
+      text-align: center;
+    }
+    .plant-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-md);
+    }
+    .plant-card.selected {
+      border-color: var(--primary);
+      background: rgba(46,204,113,0.05);
+      box-shadow: var(--shadow-md);
+    }
+    .plant-card img {
+      width: 100%;
+      height: 100px;
+      object-fit: contain; /* The fix: changed from 'cover' to 'contain' */
+      border-radius: 8px;
+    }
+    .plant-card h4 {
+      margin: 0.75rem 0 0 0;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+    
+    /* New styles for controls */
+    .ar-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #eaf8f1;
+      border-radius: 12px;
+      border: 1px solid var(--primary-light);
+    }
+    .ar-controls label {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--dark);
+    }
+    .ar-controls input[type="range"] {
+      width: 100%;
+    }
+    
+    /* AR Mock Area */
+    .preview-area {
+      margin-top: 2rem;
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 2rem;
+    }
+    @media(max-width: 880px) { .preview-area { grid-template-columns: 1fr; } }
+    
+    .camera-mock {
+      background: linear-gradient(180deg, #eafbe9, #dff7e0);
+      border-radius: 1.5rem;
+      min-height: 480px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(0,0,0,0.04);
+      box-shadow: 0 10px 30px rgba(10,60,30,0.05);
+    }
+    .camera-mock video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .camera-mock .overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+    .camera-mock .plant-overlay {
+      width: 250px; /* Default size */
+      transform-origin: bottom center;
+      transition: transform 0.3s ease, opacity 0.3s;
+      opacity: 0.95;
+      filter: drop-shadow(0 10px 18px rgba(0,0,0,0.18));
+      position: absolute;
+      bottom: 15%; /* Default position */
+    }
+    .camera-mock .camera-ui {
+      position: absolute; bottom: 1rem; left: 50%;
+      transform: translateX(-50%);
+      display: flex; gap: 0.5rem;
+      align-items: center;
+      pointer-events: auto;
+    }
+    .camera-ui-badge {
+      background: rgba(255,255,255,0.9);
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      font-weight: 600;
+      color: var(--dark);
+    }
+    
+    .message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    /* Sidebar details */
+    .sidebar-card {
+      background: var(--card);
+      padding: 1.5rem;
+      border-radius: 1.5rem;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-color);
+    }
+    .sidebar-card h3 { margin-top: 0; font-size: 1.25rem; font-weight: 600; }
+    .plant-info p { color: var(--muted); margin: 0.5rem 0; font-size: 0.95rem; }
+    .snapshot-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      margin-top: 1rem;
+    }
+    .snap-thumb {
+      display: flex;
+      gap: 0.8rem;
+      align-items: center;
+      padding: 0.6rem;
+      border-radius: 8px;
+      background: #f7fff7;
+      border: 1px solid rgba(0,0,0,0.04);
+      transition: all 0.2s ease;
+    }
+    .snap-thumb:hover { background: #eaf8f1; }
+    .snap-thumb img {
+      width: 64px;
+      height: 44px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+
+    footer {
+      max-width: 1200px;
+      margin: 1.5rem auto;
+      padding: 1rem;
+      color: var(--muted);
+      text-align: center;
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <div class="brand">
+        <!-- <i class="fas fa-seedling"></i> -->
+         <img src="./images/logo-removebg-preview.png" alt="" width="40px" height="40px">
+        <span>EkoYatra</span>
+      </div>
+      <nav class="nav-links">
+        <a href="./index.html">Home</a>
+        <!-- <a href="#">Menu</a> -->
+        <a href="#" class="active">Plantify</a>
+        <a href="./help.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-left">
+        <h1>Plantify — AR Plant Preview</h1>
+        <p>Choose a plant and preview how it would look in your space. This is a mock AR (camera overlay) to try designs before planting 🌱</p>
+        <div class="controls">
+          <select id="plantSelect" aria-label="Select plant">
+            <option value="money">Money Plant</option>
+            <option value="basil">Holy Basil (Tulsi)</option>
+            <option value="rose">Rose</option>
+            <option value="snake">Snake Plant</option>
+            <option value="ficus">Ficus</option>
+          </select>
+          <button id="previewBtn" class="btn primary">Start AR Camera</button>
+          <button id="snapshotBtn" class="btn secondary">Snapshot</button>
+        </div>
+        
+        <div class="ar-controls" id="arControls" style="display:none;">
+          <label>Plant Size: <span id="sizeValue">50%</span></label>
+          <input type="range" id="sizeSlider" min="10" max="100" value="50">
+          
+          <label>Vertical Position: <span id="verticalValue">15%</span></label>
+          <input type="range" id="verticalSlider" min="0" max="80" value="15">
+          
+          <button id="resetControlsBtn" class="btn secondary">Reset</button>
+        </div>
+      </div>
+      <div style="min-width:220px"></div>
+    </section>
+
+    <div class="library" id="library">
+      </div>
+    
+    <section class="preview-area">
+      <div class="camera-mock" id="cameraMock" aria-live="polite">
+        <video id="cameraFeed" autoplay playsinline></video>
+        
+        <div class="message" id="cameraMessage">
+          Click "Start AR Camera" to begin.
+        </div>
+        
+        <div class="overlay" style="display:none;">
+          </div>
+
+        <div class="camera-ui">
+          <div class="camera-ui-badge">Live AR</div>
+        </div>
+      </div>
+
+      <aside class="sidebar-card">
+        <h3 id="sideTitle">Plant Details</h3>
+        <div class="plant-info" id="plantInfo">
+          <p>Select a plant to see details here.</p>
+        </div>
+
+        <h4>Your Snapshots</h4>
+        <div class="snapshot-list" id="snapshotList">
+          <p style="color:var(--muted)">No snapshots yet — take one after previewing 🌟</p>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <footer>Plantify demo • This AR is a mock overlay for preview & inspiration ✨</footer>
+
+  <script>
+    // Plant data (mock images are Unsplash placeholders)
+    const plants = {
+      money: { name:'Money Plant', img:'https://images.unsplash.com/photo-1651749298723-76f60d3f8025?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8bW9uZXklMjBwbGFudHxlbnwwfHwwfHx8MA%3D%3D', desc:'Easy to grow climbing plant. Low maintenance and indoor-friendly.' },
+      basil: { name:'Holy Basil (Tulsi)', img:'https://media.istockphoto.com/id/515525102/photo/branch-of-fresh-red-holy-basil-and-holy-basil-flower.webp?a=1&b=1&s=612x612&w=0&k=20&c=h53751sl9AzHwolUNpy3J5thQZ6tHJ808xbE5F6OXNs=', desc:'Sacred herb used widely for health & spiritual practices.' },
+      rose: { name:'Rose', img:'https://images.unsplash.com/photo-1718285306914-17ee58f1e96b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8cm9zZSUyMHBsYW50fGVufDB8fDB8fHww', desc:'Classic flowering shrub; prefers sunny spots and care.' },
+      snake: { name:'Snake Plant', img:'https://images.unsplash.com/photo-1728212837158-4e5126b8c2f5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8c2Fua2UlMjBwbGFudHxlbnwwfHwwfHx8MA%3D%3D', desc:'Very hardy plant; great for air purification.' },
+      ficus: { name:'Ficus', img:'https://images.unsplash.com/photo-1501004318641-b39e6451bec6?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=8c2d1e1a7a8b4c6c6f1b6bb9f4e7d6b2', desc:'Popular indoor tree; grows into a lovely specimen.' }
+    };
+
+    const libraryEl = document.getElementById('library');
+    const plantSelect = document.getElementById('plantSelect');
+    const previewBtn = document.getElementById('previewBtn');
+    const snapshotBtn = document.getElementById('snapshotBtn');
+    const cameraMock = document.getElementById('cameraMock');
+    const cameraFeed = document.getElementById('cameraFeed');
+    const cameraMessage = document.getElementById('cameraMessage');
+    const overlay = cameraMock.querySelector('.overlay');
+    const sideTitle = document.getElementById('sideTitle');
+    const plantInfo = document.getElementById('plantInfo');
+    const snapshotList = document.getElementById('snapshotList');
+
+    const arControls = document.getElementById('arControls');
+    const sizeSlider = document.getElementById('sizeSlider');
+    const sizeValue = document.getElementById('sizeValue');
+    const verticalSlider = document.getElementById('verticalSlider');
+    const verticalValue = document.getElementById('verticalValue');
+    const resetControlsBtn = document.getElementById('resetControlsBtn');
+    
+    // Initial setup
+    let currentPlantKey = 'money';
+    let stream = null;
+    let overlayImg = null;
+
+    // Populate library
+    Object.keys(plants).forEach(key=>{
+      const p = plants[key];
+      const card = document.createElement('div');
+      card.className = 'plant-card';
+      card.innerHTML = `<img src="${p.img}" alt="${p.name}"><h4>${p.name}</h4>`;
+      card.onclick = ()=> selectPlant(key);
+      libraryEl.appendChild(card);
+    });
+    
+    // Initial selection
+    selectPlant(currentPlantKey);
+
+    function selectPlant(key) {
+      currentPlantKey = key;
+      plantSelect.value = key;
+      showPlantInfo(key);
+      updateSelectedState(key);
+      // Place the selected plant on the camera feed if it's active
+      if (stream) {
+        placePlantOverlay();
+      }
+    }
+    
+    function updateSelectedState(key) {
+      document.querySelectorAll('.plant-card').forEach(card => card.classList.remove('selected'));
+      const selectedCard = Array.from(document.querySelectorAll('.plant-card')).find(c => c.querySelector('h4').textContent === plants[key].name);
+      if (selectedCard) {
+        selectedCard.classList.add('selected');
+        selectedCard.style.transform = 'scale(1.03)';
+        setTimeout(() => selectedCard.style.transform = '', 250);
+      }
+    }
+
+    function showPlantInfo(key) {
+      const p = plants[key];
+      sideTitle.textContent = p.name;
+      plantInfo.innerHTML = `
+        <p>${p.desc}</p>
+        <p style="font-weight:700;color:var(--dark)">Care: Water moderately • Indirect sunlight</p>
+      `;
+    }
+
+    // New: Start camera function
+    async function startCamera() {
+      if (stream) {
+        // If camera is already running, just place the plant
+        placePlantOverlay();
+        return;
+      }
+      
+      cameraMessage.textContent = "Requesting camera access...";
+      previewBtn.textContent = "Loading...";
+
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+        cameraFeed.srcObject = stream;
+        cameraFeed.style.display = 'block';
+        
+        cameraFeed.onloadedmetadata = () => {
+          previewBtn.textContent = "Change Plant";
+          cameraMessage.style.display = 'none';
+          overlay.style.display = 'flex';
+          arControls.style.display = 'flex'; // Show controls
+          placePlantOverlay();
+        };
+
+      } catch (err) {
+        console.error("Error accessing camera:", err);
+        cameraMessage.textContent = "Camera access denied or not available.";
+        previewBtn.textContent = "Start AR Camera";
+      }
+    }
+    
+    // New: Place the plant overlay
+    function placePlantOverlay() {
+      if (overlayImg) overlayImg.remove();
+      
+      overlayImg = document.createElement('img');
+      overlayImg.className = 'plant-overlay';
+      overlayImg.src = plants[currentPlantKey].img;
+      overlayImg.alt = plants[currentPlantKey].name;
+      
+      // Set initial values from sliders
+      const size = sizeSlider.value;
+      const vertical = verticalSlider.value;
+      overlayImg.style.width = `${size}%`;
+      overlayImg.style.bottom = `${vertical}%`;
+      
+      overlay.appendChild(overlayImg);
+    }
+    
+    // New: Snapshot functionality (capturing from live video)
+    snapshotBtn.addEventListener('click', () => {
+      if (!stream) {
+        alert("Please start the camera first.");
+        return;
+      }
+      
+      const videoRect = cameraFeed.getBoundingClientRect();
+      const scale = window.devicePixelRatio || 1;
+      const canvas = document.createElement('canvas');
+      canvas.width = videoRect.width * scale;
+      canvas.height = videoRect.height * scale;
+      const ctx = canvas.getContext('2d');
+      ctx.imageSmoothingEnabled = true;
+
+      // Draw the current video frame to the canvas
+      ctx.drawImage(cameraFeed, 0, 0, canvas.width, canvas.height);
+
+      // Draw the plant overlay on top of the canvas
+      if (overlayImg) {
+        // Create a new image element to load the plant image with CORS enabled
+        const plantImgToDraw = new Image();
+        plantImgToDraw.crossOrigin = 'anonymous';
+        plantImgToDraw.src = overlayImg.src;
+
+        plantImgToDraw.onload = () => {
+          const w = overlayImg.clientWidth * scale;
+          const h = overlayImg.clientHeight * scale;
+          const left = overlayImg.getBoundingClientRect().left - cameraFeed.getBoundingClientRect().left;
+          const top = overlayImg.getBoundingClientRect().top - cameraFeed.getBoundingClientRect().top;
+          const offsetX = left * scale;
+          const offsetY = top * scale;
+
+          ctx.drawImage(plantImgToDraw, offsetX, offsetY, w, h);
+          const dataUrl = canvas.toDataURL('image/png');
+          addSnapshotThumb(dataUrl);
+        };
+        plantImgToDraw.onerror = () => {
+          alert('Unable to draw plant image due to CORS. Try using local images.');
+        };
+      } else {
+        const dataUrl = canvas.toDataURL('image/png');
+        addSnapshotThumb(dataUrl);
+      }
+    });
+
+    function addSnapshotThumb(dataUrl) {
+      if (snapshotList.querySelector('p')) snapshotList.innerHTML = '';
+      
+      const div = document.createElement('div');
+      div.className = 'snap-thumb';
+      
+      const img = document.createElement('img');
+      img.src = dataUrl;
+      img.alt = 'Snapshot';
+      
+      const meta = document.createElement('div');
+      meta.innerHTML = `<strong>${plants[currentPlantKey].name}</strong><div style="color:var(--muted);font-size:.9rem">Preview snapshot</div>`;
+      
+      const a = document.createElement('a');
+      a.href = dataUrl;
+      a.download = `plantify-${currentPlantKey}-${Date.now()}.png`;
+      a.textContent = 'Download';
+      a.style.marginLeft = 'auto';
+      a.className = 'btn secondary';
+      a.style.padding = '6px 10px';
+      a.style.fontSize = '0.85rem';
+      
+      div.appendChild(img);
+      div.appendChild(meta);
+      div.appendChild(a);
+      
+      snapshotList.prepend(div);
+    }
+    
+    // Link select box to the AR preview
+    plantSelect.addEventListener('change', () => {
+      selectPlant(plantSelect.value);
+    });
+    
+    // Connect the preview button to the new camera function
+    previewBtn.addEventListener('click', startCamera);
+    
+    // New: Controls logic
+    sizeSlider.addEventListener('input', () => {
+      const size = sizeSlider.value;
+      sizeValue.textContent = `${size}%`;
+      if (overlayImg) {
+        overlayImg.style.width = `${size}%`;
+      }
+    });
+    
+    verticalSlider.addEventListener('input', () => {
+      const position = verticalSlider.value;
+      verticalValue.textContent = `${position}%`;
+      if (overlayImg) {
+        overlayImg.style.bottom = `${position}%`;
+      }
+    });
+    
+    resetControlsBtn.addEventListener('click', () => {
+      const defaultSize = 50;
+      const defaultVertical = 15;
+      
+      sizeSlider.value = defaultSize;
+      sizeValue.textContent = `${defaultSize}%`;
+      verticalSlider.value = defaultVertical;
+      verticalValue.textContent = `${defaultVertical}%`;
+      
+      if (overlayImg) {
+        overlayImg.style.width = `${defaultSize}%`;
+        overlayImg.style.bottom = `${defaultVertical}%`;
+      }
+    });
+
+  </script>
+</body>
+</html>
+</html>

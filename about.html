@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About — EkoYatra</title>
+  <style>
+    /* ====== Global Styles ====== */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4fff7;
+      color: #222;
+      line-height:1.6;
+      overflow-x:hidden;
+    }
+    a { text-decoration:none; color:inherit; }
+    img { max-width:100%; }
+
+    /* ===== Navbar ===== */
+    .nav-wrap {
+      position:sticky; top:0; z-index:999;
+      background:rgba(255,255,255,0.8);
+      backdrop-filter: blur(10px);
+      box-shadow:0 2px 6px rgba(0,0,0,0.1);
+    }
+    .nav {
+      max-width:1200px; margin:auto;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0.6rem 1rem;
+    }
+    .nav .logo {
+      display:flex; align-items:center; gap:.5rem;
+      font-weight:700; font-size:1.2rem;
+      color:#2e7d32;
+    }
+    .nav .logo img { height:32px; }
+    .nav-links {
+      list-style:none; display:flex; gap:1.2rem;
+    }
+    .nav-links a {
+      font-weight:500; padding:0.3rem 0.6rem;
+      transition:0.3s;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      color:#fff; background:#2e7d32; border-radius:6px;
+    }
+    .nav-right a {
+      margin-left:1rem; font-size:0.9rem;
+      padding:0.3rem 0.7rem;
+      border:1px solid #0eda3e;
+      border-radius:6px;
+      transition:0.3s;
+    }
+    .nav-right a:hover {
+      background: #0eda3e; color:#fff;
+    }
+
+    /* ===== Sections ===== */
+    .container { max-width:1100px; margin:auto; padding:2rem 1rem; }
+    .page-hero { text-align:center; padding:4rem 1rem; }
+    .page-hero h1 { font-size:2.5rem; margin-bottom:1rem; }
+    .page-hero .accent { color:#0eda3e; }
+    .muted { color:#555; }
+
+    .glass {
+      background:rgba(255,255,255,0.7);
+      border-radius:16px;
+      padding:2rem; margin:2rem 0;
+      box-shadow:0 4px 15px rgba(0,0,0,0.05);
+      backdrop-filter: blur(12px);
+      animation: fadeUp 1s ease both;
+    }
+
+    .journey h2, .values h2, .timeline h2 { margin-bottom:1rem; }
+    .grid-4 {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+      gap:1rem;
+    }
+    .step-card {
+      background:#e8f5e9;
+      padding:1rem;
+      border-radius:12px;
+      text-align:center;
+      transition: transform 0.3s;
+    }
+    .step-card:hover { transform: translateY(-5px); }
+
+    .values ul { list-style:none; padding-left:1rem; }
+    .values li { margin:0.5rem 0; }
+
+    .timeline ol { padding-left:1.5rem; }
+    .timeline li { margin:0.6rem 0; }
+
+    /* ===== Modal ===== */
+    .modal {
+      position:fixed; inset:0; background:rgba(0,0,0,0.5);
+      display:none; align-items:center; justify-content:center;
+    }
+    .modal-body {
+      max-width:400px; padding:1.5rem;
+      position:relative;
+    }
+    .modal-body button.close {
+      position:absolute; top:0.5rem; right:0.5rem;
+      border:none; background:none; font-size:1.2rem; cursor:pointer;
+    }
+
+    /* ===== Footer ===== */
+    .site-footer {
+      background:#0eda3e; color:#fff; margin-top:3rem;
+      padding:2rem 1rem;
+    }
+    .foot-grid {
+      display:flex; justify-content:space-between;
+      flex-wrap:wrap; gap:1rem;
+      max-width:1100px; margin:auto;
+    }
+    .site-footer nav a {
+      margin-right:1rem; color:#fff; opacity:0.8;
+    }
+    .site-footer nav a:hover { opacity:1; }
+    .footer-bottom { text-align:center; margin-top:1rem; font-size:0.9rem; }
+
+    /* ===== Animations ===== */
+    @keyframes fadeUp {
+      from {opacity:0; transform:translateY(20px);}
+      to {opacity:1; transform:translateY(0);}
+    }
+
+    /* ===== Responsive ===== */
+    @media(max-width:768px) {
+      .nav { flex-direction:column; align-items:flex-start; }
+      .nav-links { margin-top:0.5rem; flex-wrap:wrap; }
+      .foot-grid { flex-direction:column; text-align:center; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="nav-wrap">
+    <nav class="nav">
+      <a class="logo" href="index.html"><img src="./images/logo-removebg-preview.png" alt="EkoYatra Logo"><span class="brand">EkoYatra</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#menu">Menu</a></li>
+        <li><a href="about.html" class="active">About</a></li>
+        <li><a href="./help.html">Contact</a></li>
+      </ul>
+      <div class="nav-right">
+        <!-- <a class="login" href="./login.html">Login</a> -->
+        <!-- <a class="help" href="./help.html">Help</a> -->
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    <!-- Intro -->
+    <section class="page-hero">
+      <h1>About <span class="accent">EkoYatra</span></h1>
+      <p class="muted">Our mission, our values, and your eco journey 🌱</p>
+    </section>
+
+    <!-- Mission -->
+    <section class="about-mission glass">
+      <h2>Our Mission</h2>
+      <p>
+        EkoYatra is a digital movement that empowers individuals, communities, and organizations
+        to take meaningful eco actions. From tracking carbon footprints to sharing success stories,
+        we make sustainability fun, futuristic, and accessible.
+      </p>
+    </section>
+
+    <!-- Step by step journey -->
+    <section class="journey">
+      <h2>Your Yatra in 4 Steps</h2>
+      <div class="grid-4 steps-cards">
+        <article class="step-card"><h3>1. Track</h3><p>Estimate your footprint with <strong>EkoTrack</strong></p></article>
+        <article class="step-card"><h3>2. Swap</h3><p>Exchange waste through <strong>EkoSwap</strong></p></article>
+        <article class="step-card"><h3>3. Learn</h3><p>Expand your knowledge with <strong>Ekolearn</strong></p></article>
+        <article class="step-card"><h3>4. Act</h3><p>Join projects and create impact with <strong>EkoCommunity</strong></p></article>
+      </div>
+    </section>
+
+    <!-- Values -->
+    <section class="values glass">
+      <h2>Our Values</h2>
+      <ul>
+        <li>🌍 Sustainability First</li>
+        <li>🤝 Community Collaboration</li>
+        <li>💡 Futuristic Innovation</li>
+        <li>💚 Transparency & Trust</li>
+      </ul>
+    </section>
+
+    <!-- Timeline / History -->
+    <section class="timeline">
+      <h2>How We Started</h2>
+      <ol class="steps">
+        <li>2017 — Idea born at a National Science Fair</li>
+        <li>2025 — First prototype built & shared with eco clubs</li>
+        <!-- <li>2026 — Expanded into EkoYatra community hub</li>
+        <li>Future — Your story shapes our next chapter 🚀</li> -->
+      </ol>
+    </section>
+  </main>
+
+  <!-- Help Modal -->
+  <div id="helpModal" class="modal">
+    <div class="modal-body glass">
+      <button class="close" data-close>✕</button>
+      <h3>Need Help?</h3>
+      <p>This is the About page. Use the navigation bar to explore features or go back to the Home page.</p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="foot-grid">
+      <div>
+        <h3>EkoYatra</h3>
+        <p>Our mission is to guide every eco journey 🌱</p>
+      </div>
+      <nav>
+        <a href="about.html" class="active">About</a>
+        <a href="projects.html">Projects</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+    <div class="footer-bottom">© <span id="year"></span> EkoYatra</div>
+  </footer>
+
+  <script>
+    // Insert current year
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Modal open/close
+    const helpLink = document.querySelector(".help");
+    const modal = document.getElementById("helpModal");
+    const closeBtn = document.querySelector("[data-close]");
+
+    helpLink.addEventListener("click", (e)=>{
+      e.preventDefault();
+      modal.style.display="flex";
+    });
+    closeBtn.addEventListener("click", ()=> modal.style.display="none");
+    window.addEventListener("click", (e)=>{
+      if(e.target === modal) modal.style.display="none";
+    });
+  </script>
+</body>
+</html>

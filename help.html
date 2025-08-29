@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EkoYatra - Help</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #e9fce5, #d0f7cf);
+      color: #2d4739;
+    }
+
+    header {
+      background: #2d6a4f;
+      color: #fff;
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 1.8rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #1b4332;
+      margin-bottom: 20px;
+    }
+
+    /* FAQ Section */
+    .faq {
+      margin-bottom: 40px;
+    }
+
+    .faq-item {
+      background: #fff;
+      margin: 10px 0;
+      border-radius: 12px;
+      padding: 15px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: 0.3s ease;
+    }
+
+    .faq-item:hover {
+      background: #f0fff4;
+      transform: scale(1.02);
+    }
+
+    .faq-question {
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    .faq-answer {
+      display: none;
+      margin-top: 10px;
+      color: #333;
+      font-size: 0.95rem;
+    }
+
+    /* Contact Info */
+    .contact-info {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 40px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .contact-info p {
+      margin: 10px 0;
+      font-size: 1rem;
+    }
+
+    /* Support Form */
+    .support-form {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .support-form input, 
+    .support-form textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      transition: 0.3s ease;
+    }
+
+    .support-form input:focus, 
+    .support-form textarea:focus {
+      outline: none;
+      border-color: #2d6a4f;
+      box-shadow: 0 0 6px #95d5b2;
+    }
+
+    .support-form button {
+      background: #2d6a4f;
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .support-form button:hover {
+      background: #40916c;
+      transform: translateY(-2px);
+    }
+
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      padding: 20px;
+      background: #2d6a4f;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <header>🌱 EkoYatra Help Center</header>
+
+  <div class="container">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <div class="faq-question">How do I use EkoTrack?</div>
+        <div class="faq-answer">You can enter your daily habits (travel, food, energy use) and we’ll estimate your carbon footprint with eco-tips.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">How to join EkoCommunity?</div>
+        <div class="faq-answer">Simply go to the Community section and create your eco-profile. You can start posting and interacting right away!</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Can I upload pictures in Biobin?</div>
+        <div class="faq-answer">Yes! Upload your kitchen or garden waste image and our AI placeholder will tell you if it’s compostable or not.</div>
+      </div>
+    </div>
+
+    <h2>Contact Information</h2>
+    <div class="contact-info">
+      <p>📧 Email: support@ekoyatra.com</p>
+      <p>📞 Phone: +91 99999 99999</p>
+      <p>🏢 Address: EcoTower, Green City Noida, India</p>
+    </div>
+
+    <h2>Support Form</h2>
+    <div class="support-form">
+      <input type="text" placeholder="Your Name" required>
+      <input type="email" placeholder="Your Email" required>
+      <textarea rows="5" placeholder="Your Message"></textarea>
+      <button type="submit">Send Message</button>
+    </div>
+  </div>
+
+  <footer>
+    © 2025 EkoYatra | Together, let’s walk the journey to a greener future 🌍✨
+  </footer>
+
+  <script>
+    // FAQ toggle
+    document.querySelectorAll(".faq-item").forEach(item => {
+      item.addEventListener("click", () => {
+        const answer = item.querySelector(".faq-answer");
+        answer.style.display = (answer.style.display === "block") ? "none" : "block";
+      });
+    });
+  </script>
+</body>
+</html>

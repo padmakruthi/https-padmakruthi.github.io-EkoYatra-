@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EkoYatra | Biobin</title>
+  <style>
+    :root {
+      --green: #4caf50;
+      --green-dark: #4caf50;
+      --light: #ffffff;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: var(--light);
+      color: var(--green-dark);
+    }
+
+    /* HEADER */
+    header {
+      background: var(--green);
+      padding: 1rem 2rem;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      animation: slideDown 0.8s ease-out;
+    }
+
+    header h1 {
+      font-size: 1.6rem;
+      letter-spacing: 1px;
+    }
+
+    nav a {
+      margin-left: 20px;
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      color: #c8e6c9;
+    }
+
+    /* BANNER */
+    .banner {
+      text-align: center;
+      padding: 3rem 1rem;
+      background: linear-gradient(rgba(76,175,80,0.8), rgba(46, 216, 52, 0.8)), 
+        url("https://i.ibb.co/tYd6mq5/compost-banner.jpg") center/cover no-repeat;
+      color: white;
+      border-bottom-left-radius: 50px;
+      border-bottom-right-radius: 50px;
+      animation: fadeIn 1s ease-in;
+    }
+
+    .banner h2 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      animation: slideUp 1s ease-in;
+    }
+
+    /* UPLOAD SECTION */
+    .upload-section {
+      padding: 2rem;
+      max-width: 800px;
+      margin: auto;
+      text-align: center;
+    }
+
+    .upload-box {
+      background: #f9fff9;
+      padding: 2rem;
+      border-radius: 25px;
+      border: 2px solid var(--green);
+      margin-top: 1.5rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+      animation: fadeIn 1s ease-in;
+    }
+
+    .upload-box:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    }
+
+    button {
+      margin-top: 1rem;
+      padding: 0.7rem 1.8rem;
+      border: none;
+      border-radius: 30px;
+      background: var(--green);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: var(--green-dark);
+      transform: scale(1.05);
+      box-shadow: 0 6px 15px rgba(76,175,80,0.4);
+    }
+
+    /* RESULT BOX */
+    .result {
+      margin-top: 2rem;
+      padding: 1.2rem;
+      border-radius: 18px;
+      font-weight: bold;
+      display: none;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      animation: fadeIn 0.8s ease-in;
+    }
+
+    .result.good {
+      background: #e8f5e9;
+      color: var(--green-dark);
+      border: 2px solid #81c784;
+    }
+
+    .result.bad {
+      background: #ffebee;
+      color: #c62828;
+      border: 2px solid #ef9a9a;
+    }
+
+    /* STEPS */
+    .steps {
+      display: none;
+      margin-top: 2rem;
+      text-align: left;
+      background: #ffffff;
+      padding: 1.8rem;
+      border-radius: 25px;
+      border: 2px solid #c8e6c9;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      animation: slideUp 0.8s ease-in;
+    }
+
+    .steps h3 {
+      color: var(--green);
+    }
+
+    .steps ol li {
+      margin-bottom: 10px;
+    }
+
+    /* PROGRESS BAR */
+    .progress {
+      margin-top: 1rem;
+      height: 20px;
+      background: #e8f5e9;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--green);
+      text-align: center;
+      color: white;
+      font-size: 0.9rem;
+      line-height: 20px;
+      transition: width 1s ease;
+      box-shadow: 0 0 15px rgba(76,175,80,0.7);
+    }
+
+    /* REMINDER */
+    .reminder {
+      margin-top: 1rem;
+      background: #fffde7;
+      border-left: 6px solid #fbc02d;
+      padding: 1rem;
+      border-radius: 15px;
+      display: none;
+      font-weight: 500;
+      animation: fadeIn 1s ease-in;
+    }
+
+    /* FOOTER */
+    footer {
+      margin-top: 3rem;
+      background: var(--green);
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-top-left-radius: 25px;
+      border-top-right-radius: 25px;
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(40px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes slideDown {
+      from { transform: translateY(-40px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>EkoYatra</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="help.html">Help</a>
+    </nav>
+  </header>
+
+  <section class="banner">
+    <h2>Biobin – Compost Guide</h2>
+    <p>Turn waste into life 🌱</p>
+  </section>
+
+  <section class="upload-section">
+    <h2>Upload an item to check compostability</h2>
+    <div class="upload-box">
+      <p>📷 Choose an image of your waste item</p>
+      <input type="file" id="fileInput">
+      <br>
+      <button onclick="checkCompost()">Check Compostability</button>
+    </div>
+
+    <div id="result" class="result"></div>
+
+    <div class="steps" id="steps">
+      <h3>Composting Steps 🌿</h3>
+      <ol>
+        <li>Chop waste into small pieces</li>
+        <li>Add brown materials (leaves, paper)</li>
+        <li>Maintain moisture (like a damp sponge)</li>
+        <li>Stir every 3-4 days</li>
+        <li>Wait 4-6 weeks</li>
+        <li>Harvest rich compost 🌱</li>
+      </ol>
+
+      <div class="progress">
+        <div class="progress-bar" id="progressBar">0%</div>
+      </div>
+
+      <div class="reminder" id="reminder">
+        ⏰ Reminder: Time to stir your compost!
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>♻️ Compost today for a greener tomorrow! ♻️</p>
+  </footer>
+
+  <script>
+    function checkCompost() {
+      const resultBox = document.getElementById("result");
+      const steps = document.getElementById("steps");
+      const reminder = document.getElementById("reminder");
+      const progressBar = document.getElementById("progressBar");
+
+      // Simulate random result
+      let isCompostable = Math.random() > 0.4;
+
+      if (isCompostable) {
+        resultBox.style.display = "block";
+        resultBox.className = "result good";
+        resultBox.innerHTML = "✅ Compostable! This item can go into your Biobin.";
+        steps.style.display = "block";
+
+        // Animate progress
+        let progress = 0;
+        progressBar.style.width = "0%";
+        progressBar.innerHTML = "0%";
+
+        const interval = setInterval(() => {
+          if (progress >= 100) {
+            clearInterval(interval);
+            reminder.style.display = "block";
+          } else {
+            progress += 20;
+            progressBar.style.width = progress + "%";
+            progressBar.innerHTML = progress + "%";
+          }
+        }, 1000);
+      } else {
+        resultBox.style.display = "block";
+        resultBox.className = "result bad";
+        resultBox.innerHTML = "❌ Not Compostable. Please dispose responsibly.";
+        steps.style.display = "none";
+        reminder.style.display = "none";
+        progressBar.style.width = "0%";
+        progressBar.innerHTML = "0%";
+      }
+    }
+  </script>
+</body>
+</html>
+
+

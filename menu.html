@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>EkoYatra - Menu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:sans-serif;line-height:1.5;background:#f1f8e9;color:#153324;}
+    header{
+      position:fixed;top:0;left:0;right:0;background:#2e7d32;color:white;
+      display:flex;justify-content:space-between;align-items:center;padding:10px 20px;z-index:1000;
+    }
+    header .logo{font-weight:bold;font-size:18px;}
+    nav a{color:white;text-decoration:none;font-weight:bold;margin-left:15px;}
+    nav a:hover{opacity:0.8;}
+    section{min-height:100vh;padding:100px 20px;text-align:center;}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px;max-width:1000px;margin-left:auto;margin-right:auto;}
+    .card{display:block;background:white;padding:18px;border-radius:12px;box-shadow:0 6px 18px rgba(20,20,20,0.08);text-decoration:none;color:#153324;transition:transform .25s;}
+    .card:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(20,20,20,0.08);}
+    .feature-icon{
+      width:40px;height:40px;border-radius:8px;background:linear-gradient(135deg,#a5d6a7,#2e7d32);
+      color:white;display:flex;align-items:center;justify-content:center;font-weight:bold;margin-bottom:10px;
+    }
+    @media (max-width:800px){.grid{grid-template-columns:repeat(2,1fr);}}
+    @media (max-width:500px){.grid{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">🌱 EkoYatra</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="login.html">Login</a>
+      <a href="help.html">Help</a>
+    </nav>
+  </header>
+
+  <section>
+    <h2>Menu Section</h2>
+    <p>Click on any feature to see demo content</p>
+
+    <div class="grid">
+      <a class="card" href="ekotrack.html"><div class="feature-icon">C</div><h4>EkoTrack</h4><p>Carbon footprint estimator</p></a>
+      <a class="card" href="ekoswap.html"><div class="feature-icon">S</div><h4>EkoSwap</h4><p>Connect to waste sellers</p></a>
+      <a class="card" href="ekolearn.html"><div class="feature-icon">L</div><h4>Ekolearn</h4><p>Knowledge hub</p></a>
+      <a class="card" href="ekorisk.html"><div class="feature-icon">R</div><h4>EkoRisk</h4><p>Disaster prediction</p></a>
+      <a class="card" href="biobin.html"><div class="feature-icon">B</div><h4>Biobin</h4><p>Compost guide</p></a>
+      <a class="card" href="community.html"><div class="feature-icon">Co</div><h4>EkoCommunity</h4><p>Social eco hub</p></a>
+      <a class="card" href="plantify.html"><div class="feature-icon">P</div><h4>Plantify</h4><p>AR plant preview</p></a>
+      <a class="card" href="stories.html"><div class="feature-icon">St</div><h4>EkoStories</h4><p>Success stories</p></a>
+      <a class="card" href="about.html"><div class="feature-icon">A</div><h4>About</h4><p>Intro & mission</p></a>
+    </div>
+  </section>
+
+</body>
+</html>
